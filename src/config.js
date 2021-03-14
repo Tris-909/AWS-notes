@@ -11,7 +11,7 @@ const config = {
       REGION: "ap-southeast-2",
       USER_POOL_ID: "ap-southeast-2_lfWIUITcp",
       APP_CLIENT_ID: "6v8p1aoa4bro76b0oqj306jbdq",
-      IDENTITY_POOL_ID: "us-east-1:84be75d0-7b27-4b38-8660-19003b36e8f1",
+      IDENTITY_POOL_ID: "ap-southeast-2:e2d123b1-263e-4281-8f9c-8ca299e24441",
     },
   };
   
