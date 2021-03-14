@@ -8,6 +8,9 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../../theme';
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 import { Link } from 'react-router-dom';
+import { useAppContext } from "../../libs/contextLib";
+import { Auth } from "aws-amplify";
+import { useHistory } from "react-router-dom";
 
 const a11yProps = (index) => {
     return {
@@ -27,13 +30,21 @@ const useStyles = makeStyles((theme) => ({
 }));  
 
 const NavBar = () => {
+    const history = useHistory();
     const classes = useStyles();
     const [value, setValue] = useState(0);
+    const { authenticated, setAuthenticated } = useAppContext();
 
     const handlerChange = (event, value) => {
         setValue(value);
     }
     
+    const logOutHandler = async () => {
+        await Auth.signOut();
+        setAuthenticated(false);
+        history.push('/signin');
+    }
+
     return(
         <ThemeProvider theme={theme} className={classes.root}>
             <AppBar position="static">
@@ -54,18 +65,30 @@ const NavBar = () => {
 
 
                         <Grid>
-                            <Link to="/signin">
-                                <Tab 
-                                    label="Sign In" 
-                                    className={classes.text}
-                                    {...a11yProps(1)} />
-                            </Link>
-                            <Link to="/signup">
-                                <Tab 
-                                    label="Sign Up" 
-                                    className={classes.text}
-                                    {...a11yProps(1)} />
-                            </Link>
+                            {
+                                !authenticated ? (
+                                    <>
+                                    <Link to="/signin">
+                                        <Tab 
+                                            label="Sign In" 
+                                            className={classes.text}
+                                            {...a11yProps(1)} />
+                                    </Link>
+                                    <Link to="/signup">
+                                        <Tab 
+                                            label="Sign Up" 
+                                            className={classes.text}
+                                            {...a11yProps(1)} />
+                                    </Link>
+                                    </>
+                                ) : (
+                                    <Tab 
+                                        label="Log Out" 
+                                        onClick={logOutHandler}
+                                        className={classes.text}
+                                        {...a11yProps(1)} />
+                                )
+                            }
                         </Grid>
                     </Grid>
                 </Tabs>
